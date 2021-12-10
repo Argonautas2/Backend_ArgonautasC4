@@ -5,19 +5,40 @@ const resolversUsuario = {
   Query: {
     Usuarios: async (parent, args, context) => {
 
-const usuarios = await UserModel.find().populate({
-  path: 'inscripciones',
-  populate: {
-    path: 'proyecto',
-    populate: {
-      path: 'avances',
-    },
-  },
-});
-return usuarios;
+      const usuarios = await UserModel.find()
+      .populate({
+        path: 'inscripciones',
+        populate: {    
+          path: 'proyecto',
+          populate: [{ path: 'lider' }, { path: 'avances' }],
+        },
+      })
+      .populate({
+        path: 'avancesCreados',
+        populate: {
+          path: 'proyecto',
+          populate: [{ path: 'lider' }, { path: 'avances' }],
+        },
+      });
+      
+      return usuarios;
 },
 Usuario: async (parent, args) => {
-const usuario = await UserModel.findOne({ _id: args._id });
+  const usuario = await UserModel.findOne({ _id: args._id })
+  .populate({
+    path: 'inscripciones',
+    populate: {
+      path: 'proyecto',
+      populate: [{ path: 'lider' }, { path: 'avances' }],
+    },
+  })
+  .populate({
+    path: 'avancesCreados',
+    populate: {
+      path: 'proyecto',
+      populate: [{ path: 'lider' }, { path: 'avances' }],
+    },
+  });
 return usuario;
 },
 },
@@ -33,7 +54,6 @@ const usuarioCreado = await UserModel.create({
   rol: args.rol,
   password: hashedPassword,
 });
-
 if (Object.keys(args).includes('estado')) {
   usuarioCreado.estado = args.estado;
 }

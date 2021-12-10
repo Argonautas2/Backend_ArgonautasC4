@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express';
-
 const tiposUsuario = gql`
   type Usuario {
     _id: ID!
@@ -9,6 +8,8 @@ const tiposUsuario = gql`
     correo: String!
     rol: Enum_Rol!
     estado: Enum_EstadoUsuario
+    inscripciones: [Inscripcion]
+    avancesCreados: [Avance]
   }
   type Query {
     Usuarios: [Usuario]
@@ -35,5 +36,4 @@ const tiposUsuario = gql`
     eliminarUsuario(_id: String, correo: String): Usuario
   }
 `;
-
 export { tiposUsuario };
