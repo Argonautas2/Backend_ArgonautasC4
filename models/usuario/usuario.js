@@ -40,6 +40,11 @@ const userSchema = new Schema({
     default: 'PENDIENTE',
   },
 });
+userSchema.virtual('proyectosLiderados', {
+  ref: 'Proyecto',
+  localField: '_id',
+  foreignField: 'lider',
+});
 
 userSchema.virtual('avancesCreados', {
   ref: 'Avance',
