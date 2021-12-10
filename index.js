@@ -9,25 +9,30 @@ import { validateToken } from './utils/tokenUtils.js';
 
 dotenv.config();
 
-const getUser = (token) => {
-  if (token) {
-    //FALTA CAPTURA DE ERROR DE JWT Y DE SPLIT
-    const dt = validateToken(token.split(' ')[1]);
-    return { user: dt, authorized: true };
-  } else return null;
+const getUserData = (token) => {
+  const verificacion = validateToken(token.split(' ')[1]);
+  if (verificacion.data) {
+    return verificacion.data;
+  } else {
+    return null;
+  }
 };
 
 const server = new ApolloServer({
   typeDefs: tipos,
   resolvers: resolvers,
   context: ({ req }) => {
-    console.log("token desde el front",req.headers.authorization)
-    const token = req.headers.authorization;
-    const auth = getUser(token);
-
-    return { auth };
+    const token = req.headers?.authorization ?? null;
+    if (token) {
+      const userData = getUserData(token);
+      if (userData) {
+        return { userData };
+      }
+    }
+    return null;
   },
 });
+
 const app = express();
 app.use(express.json());
 app.use(cors());
