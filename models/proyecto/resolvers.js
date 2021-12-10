@@ -1,5 +1,18 @@
 import { ProjectModel } from './proyecto.js';
+import { InscriptionModel } from '../inscripcion/inscripcion.js';
+import { UserModel } from '../usuario/usuario.js';
+
+
 const resolversProyecto = {
+  Proyecto: {
+    lider: async (parent, args, context) => {
+      console.log(parent.lider);
+      const usr = await UserModel.findOne({
+        _id: parent.lider.toString(),
+      });
+      return usr;
+    },
+  },
   Query: {
     Proyectos: async (parent, args, context) => {
       const proyectos = await ProjectModel.find();
