@@ -1,4 +1,5 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
+
 const tiposProyecto = gql`
   type Objetivo {
     _id: ID!
@@ -44,15 +45,18 @@ const tiposProyecto = gql`
       presupuesto: Float!
       fechaInicio: Date!
       fechaFin: Date!
-      estado: Enum_EstadoProyecto!
-      fase: Enum_FaseProyecto!
       lider: String!
       objetivos: [crearObjetivo]
     ): Proyecto
     editarProyecto(_id: String!, campos: camposProyecto!): Proyecto
     crearObjetivo(idProyecto: String!, campos: camposObjetivo!): Proyecto
-    editarObjetivo(idProyecto: String!, indexObjetivo: Int!, campos: camposObjetivo!): Proyecto
+    editarObjetivo(
+      idProyecto: String!
+      indexObjetivo: Int!
+      campos: camposObjetivo!
+    ): Proyecto
     eliminarObjetivo(idProyecto: String!, idObjetivo: String!): Proyecto
   }
 `;
+
 export { tiposProyecto };
