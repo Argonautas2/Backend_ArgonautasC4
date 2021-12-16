@@ -1,8 +1,6 @@
-import { ProjectModel } from './proyecto.js';
 import { InscriptionModel } from '../inscripcion/inscripcion.js';
 import { UserModel } from '../usuario/usuario.js';
-
-
+import { ProjectModel } from './proyecto.js';
 const resolversProyecto = {
   Proyecto: {
     lider: async (parent, args, context) => {
@@ -11,11 +9,17 @@ const resolversProyecto = {
       });
       return usr;
     },
+    inscripciones: async (parent, args, context) => {
+      const inscripciones = await InscriptionModel.find({
+        proyecto: parent._id,
+      });
+      return inscripciones;
+    },
   },
   Query: {
     Proyectos: async (parent, args, context) => {
       const proyectos = await ProjectModel.find();
-        return proyectos;
+      return proyectos;
     },
   },
   Mutation: {
@@ -43,8 +47,7 @@ const resolversProyecto = {
         args.idProyecto,
         {
           $addToSet: {
-            objetivos: { 
-              ...args.campos },
+            objetivos: { ...args.campos },
           },
         },
         { new: true }
@@ -54,7 +57,8 @@ const resolversProyecto = {
     editarObjetivo: async (parent, args) => {
       const proyectoEditado = await ProjectModel.findByIdAndUpdate(
         args.idProyecto,
-        {    $set: {
+        {
+          $set: {
             [`objetivos.${args.indexObjetivo}.descripcion`]: args.campos.descripcion,
             [`objetivos.${args.indexObjetivo}.tipo`]: args.campos.tipo,
           },
@@ -75,7 +79,6 @@ const resolversProyecto = {
         },
         { new: true }
       );
-    
       return proyectoObjetivo;
     },
   },
