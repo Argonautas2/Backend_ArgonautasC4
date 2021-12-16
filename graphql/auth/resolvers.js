@@ -28,21 +28,21 @@ const resolversAutenticacion = {
     },
 
     login: async (parent, args) => {
-      const usuarioEcontrado = await UserModel.findOne({ correo: args.correo });
-      if (await bcrypt.compare(args.password, usuarioEcontrado.password)) {
+      const usuarioEncontrado = await UserModel.findOne({ correo: args.correo });
+      if (await bcrypt.compare(args.password, usuarioEncontrado.password)) {
         return {
           token: generateToken({
-            _id: usuarioEcontrado._id,
-            nombre: usuarioEcontrado.nombre,
-            apellido: usuarioEcontrado.apellido,
-            identificacion: usuarioEcontrado.identificacion,
-            correo: usuarioEcontrado.correo,
-            rol: usuarioEcontrado.rol,
+             _id: usuarioEncontrado._id,
+            nombre: usuarioEncontrado.nombre,
+            apellido: usuarioEncontrado.apellido,
+            identificacion: usuarioEncontrado.identificacion,
+            correo: usuarioEncontrado.correo,
+            rol: usuarioEncontrado.rol,
+            foto: usuarioEncontrado.foto,
           }),
         };
       }
     },
-
     refreshToken: async (parent, args, context) => {
       console.log('contexto', context);
       if (!context.userData) {
@@ -58,6 +58,7 @@ const resolversAutenticacion = {
             identificacion: context.userData.identificacion,
             correo: context.userData.correo,
             rol: context.userData.rol,
+            foto: context.userData.foto,
           }),
         };
       }

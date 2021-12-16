@@ -1,7 +1,6 @@
-import { InscriptionModel } from '../inscripcion/inscripcion.js';
 import { UserModel } from './usuario.js';
 import bcrypt from 'bcrypt';
-
+import { InscriptionModel } from '../inscripcion/inscripcion.js';
 const resolversUsuario = {
   Usuario: {
     inscripciones: async (parent, args, context) => {
@@ -46,6 +45,15 @@ const resolversUsuario = {
           correo: args.correo,
           estado: args.estado,
         },
+        { new: true }
+      );
+
+      return usuarioEditado;
+    },
+    editarPerfil: async (parent, args) => {
+      const usuarioEditado = await UserModel.findOneAndUpdate(
+        args._id,
+        { ...args.campos },
         { new: true }
       );
       return usuarioEditado;
